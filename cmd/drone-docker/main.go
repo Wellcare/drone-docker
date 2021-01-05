@@ -36,6 +36,11 @@ func main() {
 			Usage:  "git remote url",
 			EnvVar: "DRONE_REMOTE_URL",
 		},
+		cli.StringFlag {
+			Name:   "name-build",
+			Usage:  "name build docker",
+			EnvVar: "PLUGIN_NAME_BUILD",
+		},
 		cli.StringFlag{
 			Name:   "commit.sha",
 			Usage:  "git commit sha",
@@ -246,6 +251,12 @@ func main() {
 }
 
 func run(c *cli.Context) error {
+	var name string
+	if c.String("name-build") != "" {
+		name = c.String("name-build")
+	} else {
+		name = c.String("commit.sha")
+	}
 	plugin := docker.Plugin{
 		Dryrun:  c.Bool("dry-run"),
 		Cleanup: c.BoolT("docker.purge"),
@@ -258,7 +269,7 @@ func run(c *cli.Context) error {
 		},
 		Build: docker.Build{
 			Remote:      c.String("remote.url"),
-			Name:        c.String("commit.sha"),
+			Name:        name,
 			Dockerfile:  c.String("dockerfile"),
 			Context:     c.String("context"),
 			Tags:        c.StringSlice("tags"),
