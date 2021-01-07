@@ -66,6 +66,7 @@ type (
 		Daemon  Daemon // Docker daemon configuration
 		Dryrun  bool   // Docker push is skipped
 		Cleanup bool   // Docker purge is enabled
+		Rmi     bool   //Remove image tag after build
 	}
 )
 
@@ -146,6 +147,8 @@ func (p Plugin) Exec() error {
 	if p.Cleanup {
 		cmds = append(cmds, commandRmi(p.Build.Name)) // docker rmi
 		cmds = append(cmds, commandPrune())           // docker system prune -f
+	} else if p.Rmi {
+		cmds = append(cmds, commandRmi(p.Build.Name)) // docker rmi
 	}
 
 	// execute all commands in batch mode.

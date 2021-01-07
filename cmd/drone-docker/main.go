@@ -36,10 +36,15 @@ func main() {
 			Usage:  "git remote url",
 			EnvVar: "DRONE_REMOTE_URL",
 		},
-		cli.StringFlag {
+		cli.StringFlag{
 			Name:   "name-build",
 			Usage:  "name build docker",
 			EnvVar: "PLUGIN_NAME_BUILD",
+		},
+		cli.BoolFlag{
+			Name:   "rmi",
+			Usage:  "Remove image tag build",
+			EnvVar: "PLUGIN_RMI",
 		},
 		cli.StringFlag{
 			Name:   "commit.sha",
@@ -260,6 +265,7 @@ func run(c *cli.Context) error {
 	plugin := docker.Plugin{
 		Dryrun:  c.Bool("dry-run"),
 		Cleanup: c.BoolT("docker.purge"),
+		Rmi:     c.BoolT("rmi"),
 		Login: docker.Login{
 			Registry: c.String("docker.registry"),
 			Username: c.String("docker.username"),

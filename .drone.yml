@@ -19,7 +19,7 @@ steps:
     path: /go
 
 - name: test
-  pull: always
+  pull: alwaysdock
   image: golang:1.11
   commands:
   - go test -cover ./...
